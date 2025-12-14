@@ -1,0 +1,256 @@
+version: '3.8'
+
+services:
+
+
+  # Databases
+  mysql-users:
+    image: mysql:8.0
+    container_name: mysql-users
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user_service_db
+    ports:
+      - "3307:3306"
+    networks:
+      - revcart-network
+
+  mysql-products:
+    image: mysql:8.0
+    container_name: mysql-products
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: product_service_db
+    ports:
+      - "3308:3306"
+    networks:
+      - revcart-network
+
+  mysql-orders:
+    image: mysql:8.0
+    container_name: mysql-orders
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: order_service_db
+    ports:
+      - "3309:3306"
+    networks:
+      - revcart-network
+
+  mysql-payments:
+    image: mysql:8.0
+    container_name: mysql-payments
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: payment_service_db
+    ports:
+      - "3310:3306"
+    networks:
+      - revcart-network
+
+  mysql-delivery:
+    image: mysql:8.0
+    container_name: mysql-delivery
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: delivery_service_db
+    ports:
+      - "3311:3306"
+    networks:
+      - revcart-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    networks:
+      - revcart-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - revcart-network
+
+  mysql-carts:
+    image: mysql:8.0
+    container_name: mysql-carts
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cart_service_db
+    ports:
+      - "3312:3306"
+    networks:
+      - revcart-network
+
+  # Microservices
+  user-service:
+    build: ./backend-services/user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql-users
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-users:3306/user_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+      # Email configuration
+      MAIL_USERNAME: bujjithota27084@gmail.com
+      MAIL_PASSWORD: vbanptcefhczvoqx
+    networks:
+      - revcart-network
+
+  product-service:
+    build: ./backend-services/product-service
+    container_name: product-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql-products
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-products:3306/product_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  cart-service:
+    build: ./backend-services/cart-service
+    container_name: cart-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql-carts
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-carts:3306/cart_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  order-service:
+    build: ./backend-services/order-service
+    container_name: order-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mysql-orders
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-orders:3306/order_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  payment-service:
+    build: ./backend-services/payment-service
+    container_name: payment-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mysql-payments
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-payments:3306/payment_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      RAZORPAY_KEY_ID: test_key_id
+      RAZORPAY_KEY_SECRET: test_key_secret
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  delivery-service:
+    build: ./backend-services/delivery-service
+    container_name: delivery-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      - mysql-delivery
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-delivery:3306/delivery_service_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  notification-service:
+    build: ./backend-services/notification-service
+    container_name: notification-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/notification_service_db
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  analytics-service:
+    build: ./backend-services/analytics-service
+    container_name: analytics-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/analytics_service_db
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  api-gateway:
+    build: ./backend-services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - product-service
+      - cart-service
+      - order-service
+      - payment-service
+      - delivery-service
+      - notification-service
+      - analytics-service
+    environment:
+      SPRING_CLOUD_CONSUL_ENABLED: false
+      SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
+    networks:
+      - revcart-network
+
+  # Frontend
+  frontend:
+    build: ./frontend-services/shell-app
+    container_name: revcart-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - revcart-network
+
+networks:
+  revcart-network:
+    driver: bridge

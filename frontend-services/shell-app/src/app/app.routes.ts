@@ -1,0 +1,43 @@
+import { Routes } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
+import { ProductsComponent } from './pages/products/products.component';
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
+import { CartComponent } from './pages/cart/cart.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { OrdersComponent } from './pages/orders/orders.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { WishlistComponent } from './pages/wishlist/wishlist.component';
+import { CouponsComponent } from './pages/coupons/coupons.component';
+import { DeliveryAgentLoginComponent } from './pages/delivery-agent/delivery-agent-login.component';
+import { DeliveryAgentRegisterComponent } from './pages/delivery-agent/delivery-agent-register.component';
+import { DeliveryAgentDashboardComponent } from './pages/delivery-agent/delivery-agent-dashboard.component';
+import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-password.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
+import { AdminProductFormComponent } from './pages/admin/admin-product-form.component';
+import { AnalyticsDashboardComponent } from './pages/admin/analytics-dashboard.component';
+
+export const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'admin/products/new', component: AdminProductFormComponent },
+  { path: 'admin/products/edit/:id', component: AdminProductFormComponent },
+  { path: 'admin/analytics', component: AnalyticsDashboardComponent },
+  { path: 'products', component: ProductsComponent },
+  { path: 'products/:id', component: ProductDetailComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'orders', component: OrdersComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'wishlist', component: WishlistComponent },
+  { path: 'coupons', component: CouponsComponent },
+  { path: 'delivery-agent/login', component: DeliveryAgentLoginComponent },
+  { path: 'delivery-agent/register', component: DeliveryAgentRegisterComponent },
+  { path: 'delivery-agent/dashboard', component: DeliveryAgentDashboardComponent },
+  { path: '**', redirectTo: '/home' }
+];

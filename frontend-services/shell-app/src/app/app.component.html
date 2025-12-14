@@ -1,0 +1,11 @@
+<app-header></app-header>
+<main>
+  <router-outlet></router-outlet>
+</main>
+<app-footer></app-footer>
+
+<!-- Wishlist Notification -->
+<div *ngIf="wishlistNotification.show" class="wishlist-notification">
+  <i class="bi bi-heart-fill"></i>
+  {{ wishlistNotification.message }}
+</div>
