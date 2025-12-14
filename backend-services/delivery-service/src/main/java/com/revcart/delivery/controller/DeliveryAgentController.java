@@ -40,7 +40,15 @@ public class DeliveryAgentController {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Email already exists"));
         }
         
+        // Set default values for required fields if not provided
+        if (agent.getVehicleType() == null || agent.getVehicleType().isEmpty()) {
+            agent.setVehicleType("BIKE");
+        }
+        if (agent.getStatus() == null || agent.getStatus().isEmpty()) {
+            agent.setStatus("AVAILABLE");
+        }
         agent.setActive(true);
+        
         DeliveryAgent savedAgent = agentRepository.save(agent);
         
         Map<String, Object> response = new HashMap<>();

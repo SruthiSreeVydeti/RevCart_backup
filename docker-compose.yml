@@ -187,6 +187,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-delivery:3306/delivery_service_db?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      DB_HOST: mysql-delivery
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_NAME: delivery_service_db
       SPRING_CLOUD_CONSUL_ENABLED: false
       SPRING_CLOUD_CONSUL_DISCOVERY_ENABLED: false
     networks:

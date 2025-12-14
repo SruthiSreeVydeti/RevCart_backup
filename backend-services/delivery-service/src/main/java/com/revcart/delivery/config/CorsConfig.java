@@ -1,0 +1,1 @@
+// CORS handled by API Gateway - removed to avoid duplicate headers

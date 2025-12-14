@@ -21,7 +21,16 @@ public class CartController {
 
     @PostMapping("/{userId}/add")
     public ResponseEntity<Cart> addItem(@PathVariable Long userId, @RequestBody CartItemRequest request) {
-        return ResponseEntity.ok(cartService.addItemToCart(userId, request));
+        try {
+            System.out.println("Adding item to cart - UserId: " + userId + ", Request: " + request);
+            Cart cart = cartService.addItemToCart(userId, request);
+            System.out.println("Item added successfully to cart: " + cart.getId());
+            return ResponseEntity.ok(cart);
+        } catch (Exception e) {
+            System.err.println("Error adding item to cart: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @DeleteMapping("/{userId}/remove/{productId}")

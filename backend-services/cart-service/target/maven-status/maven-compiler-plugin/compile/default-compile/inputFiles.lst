@@ -1,0 +1,13 @@
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\CartServiceApplication.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\config\RestTemplateConfig.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\controller\CartController.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\controller\WishlistController.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\dto\CartItemRequest.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\entity\Cart.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\entity\CartItem.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\entity\Wishlist.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\exception\GlobalExceptionHandler.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\repository\CartItemRepository.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\repository\CartRepository.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\repository\WishlistRepository.java
+d:\revcart_micro_p2\RevCart_P2\backend-services\cart-service\src\main\java\com\revcart\cart\service\CartService.java

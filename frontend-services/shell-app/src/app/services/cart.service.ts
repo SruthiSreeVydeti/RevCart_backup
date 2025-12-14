@@ -8,7 +8,7 @@ import { ApiConfigService } from './api-config.service';
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl: string;
+  private apiUrl!: string;
   private cartItems = new BehaviorSubject<any[]>([]);
   public cartItems$ = this.cartItems.asObservable();
 
@@ -47,7 +47,7 @@ export class CartService {
 
   getCart(): Observable<any> {
     const userId = this.getUserId();
-    return this.http.get(`${this.apiUrl}/${userId}`);
+    return this.http.get(this.apiConfig.getApiUrl(`cart/${userId}`));
   }
 
   addToCart(product: any, quantity: number = 1): void {
@@ -55,6 +55,7 @@ export class CartService {
       console.warn('Admin users cannot add items to cart');
       return;
     }
+    
     const userId = this.getUserId();
     const cartRequest = { 
       productId: product.id, 
@@ -62,14 +63,28 @@ export class CartService {
       quantity, 
       price: product.price 
     };
+    
+    console.log('Adding to cart:', cartRequest, 'for user:', userId);
+    console.log('API URL:', this.apiConfig.getApiUrl(`cart/${userId}/add`));
+    
+    // Try without authentication headers first since cart service doesn't require auth
     this.http.post(this.apiConfig.getApiUrl(`cart/${userId}/add`), cartRequest).subscribe({
       next: (response) => {
-        console.log('Item added to cart, reloading...');
+        console.log('Item added to cart successfully:', response);
         setTimeout(() => this.loadCartFromServer(), 500);
         this.showAddToCartNotification(product.name, quantity);
       },
       error: (error) => {
         console.error('Error adding to cart:', error);
+        console.error('Error details:', error.error);
+        console.error('Error status:', error.status);
+        if (error.status === 401) {
+          alert('Session expired. Please login again.');
+        } else if (error.status === 0) {
+          alert('Network error. Please check if the server is running.');
+        } else {
+          alert('Failed to add item to cart. Please try again.');
+        }
       }
     });
   }
@@ -90,8 +105,11 @@ export class CartService {
 
   private loadCartFromServer(): void {
     const userId = this.getUserId();
+    console.log('Loading cart for user:', userId);
+    
     this.http.get(this.apiConfig.getApiUrl(`cart/${userId}`)).subscribe({
       next: (response: any) => {
+        console.log('Cart response:', response);
         const items = response.items || [];
         if (items.length > 0) {
           const productRequests = items.map((item: any) => 
@@ -121,7 +139,7 @@ export class CartService {
 
   updateCartItem(productId: number, quantity: number): Observable<any> | void {
     if (this.authService.isAuthenticated()) {
-      return this.http.put(`${this.apiUrl}/update`, 
+      return this.http.put(this.apiConfig.getApiUrl('cart/update'), 
         { productId, quantity }, 
         { headers: this.getHeaders() }
       );

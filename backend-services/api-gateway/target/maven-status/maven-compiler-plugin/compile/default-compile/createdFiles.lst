@@ -1,0 +1,4 @@
+com\revcart\gateway\FallbackController.class
+com\revcart\gateway\GatewayConfig.class
+com\revcart\gateway\ApiGatewayApplication.class
+com\revcart\gateway\CorsGlobalConfig.class

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Test</title>
+</head>
+<body>
+    <h1>Cart Test</h1>
+    <button onclick="testAddToCart()">Test Add to Cart</button>
+    <div id="result"></div>
+
+    <script>
+        function testAddToCart() {
+            const cartRequest = {
+                productId: 1,
+                productName: "Test Product",
+                quantity: 1,
+                price: 100.00
+            };
+
+            fetch('http://localhost:8080/api/cart/1/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(cartRequest)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = '<pre>Error: ' + error.message + '</pre>';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
