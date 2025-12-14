@@ -11,11 +11,11 @@ export class ApiConfigService {
   }
 
   private getApiBaseUrl(): string {
-    return 'http://localhost:8080';
+    return '';
   }
 
   getApiUrl(endpoint: string): string {
-    return `${this.apiBaseUrl}/api/${endpoint}`;
+    return `/api/${endpoint}`;
   }
 
   getBaseUrl(): string {
