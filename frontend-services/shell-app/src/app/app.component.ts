@@ -1,36 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { AuthService } from './services/auth.service';
-import { WishlistService } from './services/wishlist.service';
-import { CommonModule } from '@angular/common';
-import { SharedModule } from './shared/shared.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, CommonModule, SharedModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  imports: [RouterOutlet],
+  template: `
+    <div>
+      <h1>RevCart E-commerce</h1>
+      <p>Application is loading...</p>
+      <router-outlet></router-outlet>
+    </div>
+  `
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'RevCart';
-  showWelcomeLoader = false;
-  wishlistNotification = {show: false, message: ''};
-
-  constructor(private authService: AuthService, private wishlistService: WishlistService) {}
-
-  ngOnInit() {
-    this.authService.showWelcome$.subscribe(show => {
-      this.showWelcomeLoader = show;
-    });
-    this.wishlistService.notification$.subscribe(notification => {
-      this.wishlistNotification = notification;
-    });
-  }
-
-  onLoadingComplete() {
-    this.authService.hideWelcome();
-  }
 }
