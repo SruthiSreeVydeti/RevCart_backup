@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [],
   template: `
     <div>
       <h1>RevCart E-commerce</h1>
-      <p>Application is loading...</p>
-      <router-outlet></router-outlet>
+      <p>Minimal app - NO routing, NO services, NO dependencies</p>
+      <p>If you see this, Angular is working!</p>
     </div>
   `
 })
